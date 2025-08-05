@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Cloud Economics Assessment - IMMEO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1B4332 0%, #2D5A41 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .main-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .company-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tool-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .tool-header {
+            background: linear-gradient(135deg, #1B4332, #2D5A41);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .tool-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .tool-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .formula-display {
+            background: #f8fafc;
+            border: 3px solid #2D5A41;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .formula-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1B4332;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .formula-label {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 700px;
+        }
+        
+        .input-section {
+            padding: 40px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .results-section {
+            padding: 40px;
+            background: white;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #1B4332;
+            border-bottom: 3px solid #2D5A41;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #2D5A41;
+            box-shadow: 0 0 0 3px rgba(45, 90, 65, 0.1);
+        }
+        
+        .input-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border: 2px solid #22c55e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.15);
+        }
+        
+        .metric-card.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: #f59e0b;
+        }
+        
+        .metric-card.danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-color: #ef4444;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1B4332;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 5px;
+        }
+        
+        .metric-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+        
+        .optimization-suggestions {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .optimization-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .optimization-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .optimization-item {
+            padding: 10px 0;
+            color: #1e40af;
+            font-weight: 500;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .optimization-item:before {
+            content: "✓";
+            margin-right: 10px;
+            font-weight: bold;
+            color: #22c55e;
+            font-size: 1.2rem;
+        }
+        
+        .value-highlight {
+            background: linear-gradient(135deg, #1B4332, #2D5A41);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .value-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .value-label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .immeo-branding {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .immeo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 2px;
+        }
+        
+        
+        .cta-section {
+            background: linear-gradient(135deg, #1B4332, #2D5A41);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: slide 2s infinite;
+        }
+        
+        @keyframes slide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .cta-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1B4332;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-button:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .tool-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .input-section, .results-section {
+                padding: 20px;
+            }
+            
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            .value-number {
+                font-size: 2.5rem;
+            }
+            
+            .formula-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="immeo-branding">
+                <div class="immeo-text">IMMEO</div>
+            </div>
+            <h1 class="main-title">The Economics of Customer Care</h1>
+            <div class="subtitle">
+                Contrary to popular belief, lower costs and higher customer satisfaction are not mutually exclusive 
+                when companies optimize the customer value equation.
+            </div>
+            <div class="company-badge">Powered by Salesforce Service Cloud</div>
+        </div>
+
+        <div class="tool-container">
+            <div class="tool-header">
+                <h2 class="tool-title">Service Cloud Value Calculator</h2>
+                <p class="tool-description">
+                    Discover how optimizing your customer service operations with AI-powered Service Cloud 
+                    can simultaneously reduce costs and improve customer satisfaction.
+                </p>
+            </div>
+
+            <div class="formula-display">
+                <div class="formula-label">The Customer Care Value Equation</div>
+                <div class="formula-text">
+                    Value = Revenue - (Contact Rate × Handle Time × Cost per Unit) - Operations Overhead
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="input-section">
+                    <h3 class="section-title">Your Current Service Metrics</h3>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Monthly Customer Contacts</label>
+                        <input type="number" id="monthlyContacts" class="input-field" value="5000" min="100" max="1000000">
+                        <div class="input-description">Total inbound contacts across all channels</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Average Handle Time (minutes)</label>
+                        <input type="number" id="handleTime" class="input-field" value="8" min="1" max="60" step="0.5">
+                        <div class="input-description">Average time to resolve a customer inquiry</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Cost per Contact (DKK)</label>
+                        <input type="number" id="costPerContact" class="input-field" value="65" min="10" max="500">
+                        <div class="input-description">Fully loaded cost including agent time, overhead, systems</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">First Contact Resolution Rate (%)</label>
+                        <input type="number" id="fcrRate" class="input-field" value="72" min="10" max="100" step="1">
+                        <div class="input-description">Percentage of issues resolved on first contact</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Customer Satisfaction Score (%)</label>
+                        <input type="number" id="csatScore" class="input-field" value="78" min="0" max="100" step="1">
+                        <div class="input-description">Current CSAT or NPS score</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Number of Service Agents</label>
+                        <input type="number" id="serviceAgents" class="input-field" value="25" min="1" max="1000">
+                        <div class="input-description">Total customer service team members</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Average Revenue per Customer (DKK)</label>
+                        <input type="number" id="revenuePerCustomer" class="input-field" value="1200" min="100" max="100000">
+                        <div class="input-description">Monthly revenue per customer</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Annual Service Cloud Budget (DKK)</label>
+                        <input type="number" id="serviceCloudBudget" class="input-field" value="600000" min="100000" max="10000000">
+                        <div class="input-description">Implementation, licenses, and optimization costs</div>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h3 class="section-title">Your Optimization Potential</h3>
+                    
+                    <div class="value-highlight">
+                        <div class="value-number" id="annualSavings">Calculating...</div>
+                        <div class="value-label">Annual Cost Savings Potential</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="currentCost">Calculating...</div>
+                        <div class="metric-label">Current Annual Service Cost</div>
+                        <div class="metric-description">Total cost of customer service operations</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="optimizedCost">Calculating...</div>
+                        <div class="metric-label">Optimized Annual Cost</div>
+                        <div class="metric-description">With Service Cloud automation and AI</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="contactReduction">15%</div>
+                        <div class="metric-label">Contact Volume Reduction</div>
+                        <div class="metric-description">Through self-service, AI Agents and deflection</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="handleTimeReduction">20%</div>
+                        <div class="metric-label">Handle Time Reduction</div>
+                        <div class="metric-description">With AI-assisted agent tools</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="fcrImprovement">Calculating...</div>
+                        <div class="metric-label">New FCR Rate</div>
+                        <div class="metric-description">Improved first contact resolution</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="csatImprovement">Calculating...</div>
+                        <div class="metric-label">Projected CSAT Score</div>
+                        <div class="metric-description">Enhanced customer satisfaction</div>
+                    </div>
+
+                    <div class="optimization-suggestions">
+                        <div class="optimization-title">Key Optimization Levers</div>
+                        <ul class="optimization-list" id="optimizationList">
+                            <li class="optimization-item">Implement AI-powered chatbots for tier-1 inquiries</li>
+                            <li class="optimization-item">Deploy knowledge base with intelligent article recommendations</li>
+                            <li class="optimization-item">Enable omni-channel routing with skill-based assignment</li>
+                            <li class="optimization-item">Automate case classification and prioritization</li>
+                            <li class="optimization-item">Integrate predictive analytics for proactive service</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h3 class="cta-title">Transform Your Customer Service Economics</h3>
+                <p class="cta-text">
+                    Let's explore how a Service Cloud pilot can demonstrate these improvements 
+                    for your specific business, backed by our 9x Salesforce certifications.
+                </p>
+                <button class="cta-button" onclick="scheduleCall()">Schedule Assessment Call</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // All input fields
+        const inputs = {
+            monthlyContacts: document.getElementById('monthlyContacts'),
+            handleTime: document.getElementById('handleTime'),
+            costPerContact: document.getElementById('costPerContact'),
+            fcrRate: document.getElementById('fcrRate'),
+            csatScore: document.getElementById('csatScore'),
+            serviceAgents: document.getElementById('serviceAgents'),
+            revenuePerCustomer: document.getElementById('revenuePerCustomer'),
+            serviceCloudBudget: document.getElementById('serviceCloudBudget')
+        };
+
+        // Result display elements
+        const results = {
+            currentCost: document.getElementById('currentCost'),
+            optimizedCost: document.getElementById('optimizedCost'),
+            annualSavings: document.getElementById('annualSavings'),
+            contactReduction: document.getElementById('contactReduction'),
+            handleTimeReduction: document.getElementById('handleTimeReduction'),
+            fcrImprovement: document.getElementById('fcrImprovement'),
+            csatImprovement: document.getElementById('csatImprovement')
+        };
+
+        // Industry benchmarks for Service Cloud improvements
+        const serviceBenchmarks = {
+            contactReduction: 0.15,      // 15% reduction through self-service
+            handleTimeReduction: 0.20,   // 20% reduction with AI assistance
+            fcrImprovement: 1.15,        // 15% improvement in FCR
+            csatImprovement: 1.12,       // 12% improvement in CSAT
+            deflectionRate: 0.25,        // 25% of contacts deflected to self-service
+            automationRate: 0.30         // 30% of tasks automated
+        };
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return (amount / 1000000).toFixed(1) + 'M DKK';
+            } else if (amount >= 1000) {
+                return (amount / 1000).toFixed(0) + 'K DKK';
+            } else {
+                return amount.toFixed(0) + ' DKK';
+            }
+        }
+
+        function calculateMetrics() {
+            // Get current values
+            const monthlyContacts = parseInt(inputs.monthlyContacts.value) || 0;
+            const handleTime = parseFloat(inputs.handleTime.value) || 0;
+            const costPerContact = parseFloat(inputs.costPerContact.value) || 0;
+            const fcrRate = parseFloat(inputs.fcrRate.value) / 100 || 0;
+            const csatScore = parseFloat(inputs.csatScore.value) || 0;
+            const serviceAgents = parseInt(inputs.serviceAgents.value) || 0;
+            const revenuePerCustomer = parseFloat(inputs.revenuePerCustomer.value) || 0;
+            const serviceCloudBudget = parseFloat(inputs.serviceCloudBudget.value) || 0;
+
+            // Calculate current state
+            const annualContacts = monthlyContacts * 12;
+            const currentAnnualCost = annualContacts * costPerContact;
+
+            // Calculate optimized state
+            const optimizedContacts = annualContacts * (1 - serviceBenchmarks.contactReduction);
+            const optimizedHandleTime = handleTime * (1 - serviceBenchmarks.handleTimeReduction);
+            const optimizedCostPerContact = costPerContact * (handleTime > 0 ? optimizedHandleTime / handleTime : 1);
+            const optimizedAnnualCost = optimizedContacts * optimizedCostPerContact;
+
+            // Calculate savings
+            const annualSavings = currentAnnualCost - optimizedAnnualCost - serviceCloudBudget;
+
+            // Calculate improvements
+            const newFcrRate = Math.min(fcrRate * serviceBenchmarks.fcrImprovement, 0.95);
+            const newCsatScore = Math.min(csatScore * serviceBenchmarks.csatImprovement, 95);
+
+            // Update display
+            results.currentCost.textContent = formatCurrency(currentAnnualCost);
+            results.optimizedCost.textContent = formatCurrency(optimizedAnnualCost);
+            results.annualSavings.textContent = formatCurrency(Math.max(annualSavings, 0));
+            results.fcrImprovement.textContent = Math.round(newFcrRate * 100) + '%';
+            results.csatImprovement.textContent = Math.round(newCsatScore) + '%';
+
+            // Update optimization suggestions based on metrics
+            updateOptimizationSuggestions(fcrRate, csatScore, handleTime);
+
+            // Update metric card styles based on performance
+            updateMetricStyles(annualSavings, newFcrRate, newCsatScore);
+        }
+
+        function updateOptimizationSuggestions(fcr, csat, handleTime) {
+            const suggestions = [];
+
+            if (fcr < 0.80) {
+                suggestions.push('Implement AI-powered knowledge base for better first-contact resolution');
+            }
+            if (csat < 80) {
+                suggestions.push('Deploy sentiment analysis and real-time coaching for agents');
+            }
+            if (handleTime > 10) {
+                suggestions.push('Automate repetitive tasks with Einstein Case Classification');
+            }
+            suggestions.push('Enable omni-channel routing with skill-based assignment');
+            suggestions.push('Integrate predictive analytics for proactive service');
+            suggestions.push('Deploy chatbots for 24/7 tier-1 support coverage');
+
+            const optimizationList = document.getElementById('optimizationList');
+            optimizationList.innerHTML = suggestions.map(s => 
+                `<li class="optimization-item">${s}</li>`
+            ).join('');
+        }
+
+        function updateMetricStyles(savings, fcr, csat) {
+            // Color-code the savings metric
+            const savingsCard = results.annualSavings.parentElement;
+            if (savings > 0) {
+                savingsCard.style.color = '#166534';
+            } else {
+                savingsCard.style.color = '#dc2626';
+            }
+        }
+
+        function scheduleCall() {
+            alert('Thank you for your interest in Service Cloud optimization!\n\nNext Steps:\n• We\'ll analyze your service metrics in detail\n• Design a custom Service Cloud pilot\n• Demonstrate AI-powered service capabilities\n• Show proven ROI from similar implementations\n\nContact: IMMEO\nWebsite: immeo.dk\nSpecialty: Salesforce Service Cloud + AI');
+        }
+
+        // Add event listeners to all inputs
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', calculateMetrics);
+        });
+
+        // Initial calculation on page load
+        calculateMetrics();
+
+        // Add interactive enhancements
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add hover effects to metric cards
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-5px) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
